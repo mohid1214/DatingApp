@@ -12,19 +12,17 @@ public class TokenService(IConfiguration config) : ITokenService
 {
     public string CreateToken(AppUser user)
     {
-        var tokenKey = config["TokenKey"] ?? throw new Exception("Cant get token key");
-        if (tokenKey?.Length < 64)
-            throw new Exception("Token key needs to be greater than 63");
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
+        var tokenKey = config["TokenKey"] ?? throw new Exception("Tokenkey not found in config file");
+        if (tokenKey.Length < 64) throw new Exception("token length should be >63");
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Email,user.Email),
-            new(ClaimTypes.NameIdentifier, user.Id)
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id)
         };
 
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
-
+        var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
@@ -34,8 +32,8 @@ public class TokenService(IConfiguration config) : ITokenService
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
-
         return tokenHandler.WriteToken(token);
+
 
     }
 }
