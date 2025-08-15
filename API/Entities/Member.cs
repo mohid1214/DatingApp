@@ -8,7 +8,8 @@ public class Member
 {
 
     public required string Id { get; set; }
-    public required string Gender { get; set; }
+    public required string DisplayName { get; set; }
+    public required string Gender { get; set; } 
     public required string DateOfBirth { get; set; }
     public required string Created { get; set; }
     public required string LastActive { get; set; }
