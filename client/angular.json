@@ -17,6 +17,14 @@
         "@schematics/angular:guard": {
           "skipTests": true,
           "path": "src/core/guards"
+        },
+        "@schematics/angular:resolver": {
+          "skipTests": true,
+          "path": "src"
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true,
+          "path": "src/core/pipes"
         }
       },
       "root": "",
